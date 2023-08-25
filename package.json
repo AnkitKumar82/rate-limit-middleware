@@ -1,0 +1,27 @@
+{
+  "name": "rate-limit-middleware",
+  "version": "1.0.0",
+  "description": "Rate Limiting Middleware for Express",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnkitKumar82/rate-limit-middleware.git"
+  },
+  "author": "Ankit Kumar <kumarankit1041999@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AnkitKumar82/rate-limit-middleware/issues"
+  },
+  "homepage": "https://github.com/AnkitKumar82/rate-limit-middleware#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
