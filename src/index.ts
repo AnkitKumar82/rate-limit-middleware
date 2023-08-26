@@ -1,4 +1,2 @@
-import { createRateLimiter } from './RateLimiter'
-
 export * from './Types'
-export default createRateLimiter
+export { createRateLimiter } from './RateLimiter'

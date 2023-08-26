@@ -12,7 +12,7 @@ import {
 
 import InMemoryStore from './InMemoryStore'
 
-async function createRateLimiter (customConfig: CreateRateLimiterInput): Promise<CreateRateLimiterOutput> {
+export async function createRateLimiter (customConfig: CreateRateLimiterInput): Promise<CreateRateLimiterOutput> {
   const config = { ...DEFAULT_CONFIG, ...customConfig }
   _validateConfig(config)
 
@@ -71,5 +71,3 @@ function _validateConfig (config: CreateRateLimiterInput) {
     throw ERRORS.INVALID_CONFIG
   }
 }
-
-export { createRateLimiter }
