@@ -99,6 +99,9 @@ out
 # vuepress build output
 .vuepress/dist
 
+# typescript build output
+dist/
+
 # vuepress v2.x temp and cache directory
 .temp
 .cache
