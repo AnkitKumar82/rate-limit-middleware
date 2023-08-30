@@ -1,0 +1,33 @@
+# Files and directories to ignore when publishing to npm
+
+# Development and build files
+node_modules/
+build/
+src/
+
+# Test files
+__tests__/
+test/
+tests/
+*.test.*
+*.spec.*
+
+# Editor and IDE specific files
+.vscode/
+.idea/
+*.sublime*
+*.swp
+*.swo
+
+# Documentation and example files
+docs/
+doc/
+example/
+examples/
+
+# Configuration files
+tsconfig.json
+package-lock.json
+yarn.lock
+.npmrc
+*.config.js
