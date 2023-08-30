@@ -30,7 +30,7 @@ class InMemoryStore implements Store {
       return true
     }
 
-    if (currHits > maxHits) return false
+    if (currHits >= maxHits) return false
 
     this.dataStore?.set(prefixedKey, currHits + 1)
     return true
