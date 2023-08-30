@@ -12,7 +12,8 @@ export const DEFAULT_CONFIG = {
   maxHits: 10,
   message: 'Too Many Requests',
   statusCode: 429,
-  store: STORE_ENUM.IN_MEMORY
+  store: STORE_ENUM.IN_MEMORY,
+  prefix: ''
 }
 
 export const ERRORS: ErrorConstants = {
@@ -23,5 +24,9 @@ export const ERRORS: ErrorConstants = {
   INVALID_MEMORY_STORE: {
     name: 'RL::INVALID_MEMORY_STORE',
     message: 'Invalid Memory Store'
+  },
+  INVALID_REDIS_CONFIG: {
+    name: 'RL::INVALID_REDIS_CONFIG',
+    message: 'Invalid Redis Config'
   }
 }

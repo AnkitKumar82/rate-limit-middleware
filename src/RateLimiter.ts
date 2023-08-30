@@ -9,8 +9,8 @@ import {
   ERRORS,
   STORE_ENUM
 } from './Constants'
-
 import InMemoryStore from './InMemoryStore'
+import RedisStore from './RedisStore'
 
 export async function createRateLimiter (customConfig: CreateRateLimiterInput): Promise<CreateRateLimiterOutput> {
   const config = { ...DEFAULT_CONFIG, ...customConfig }
@@ -20,7 +20,8 @@ export async function createRateLimiter (customConfig: CreateRateLimiterInput): 
 
   switch (config.store) {
     case STORE_ENUM.IN_MEMORY: {
-      memoryStore = new InMemoryStore()
+      const inMemoryStoreConfig = { prefix: config.prefix }
+      memoryStore = new InMemoryStore(inMemoryStoreConfig)
 
       setTimeout(() => {
         memoryStore.clearAll()
@@ -30,7 +31,16 @@ export async function createRateLimiter (customConfig: CreateRateLimiterInput): 
     }
 
     case STORE_ENUM.REDIS: {
-      // TODO: add redis store
+      if (config.redisConnectionConfig === undefined) {
+        throw ERRORS.INVALID_MEMORY_STORE
+      }
+      const redisStoreConfig = { connectionConfig: config.redisConnectionConfig, prefix: config.prefix }
+      memoryStore = new RedisStore(redisStoreConfig)
+
+      setTimeout(() => {
+        memoryStore.clearAll()
+      }, config.timeFrameInMs)
+
       break
     }
 

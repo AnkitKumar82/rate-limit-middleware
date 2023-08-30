@@ -4,11 +4,17 @@ import {
 
 interface InMemoryStore {
   dataStore?: Map<string, number>
+  prefix: string
+}
+
+interface StoreConfig {
+  prefix: string
 }
 
 class InMemoryStore implements Store {
-  constructor () {
+  constructor (config: StoreConfig) {
     this.dataStore = new Map<string, number>()
+    this.prefix = config.prefix
 
     this.shouldAllow = this.shouldAllow.bind(this)
     this.clearAll = this.clearAll.bind(this)
@@ -19,7 +25,7 @@ class InMemoryStore implements Store {
     const prefixedKey = this._getPrefixedKey(key)
     const currHits = this.dataStore?.get(prefixedKey)
 
-    if (!currHits) {
+    if (!currHits || currHits === null) {
       this.dataStore?.set(prefixedKey, 1)
       return true
     }
@@ -31,7 +37,7 @@ class InMemoryStore implements Store {
   }
 
   _getPrefixedKey (key: string): string {
-    const prefixedKey = `rate_limit_${key}`
+    const prefixedKey = `${this.prefix}::${key}`
     return prefixedKey
   }
 

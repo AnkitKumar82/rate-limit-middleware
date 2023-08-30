@@ -1,5 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
 
+export interface RedisConnectionConfig {
+  host: string
+  port: string
+  user?: string
+  password?: string
+}
+
 export interface CreateRateLimiterInput {
   /**
    * Time window in milliseconds
@@ -39,6 +46,10 @@ export interface CreateRateLimiterInput {
    */
   statusCode?: number
   /**
+   * Prefix to append to the Client Identifier
+   */
+  prefix?: string
+  /**
    * Store to be used to store the data
    *
    * Default: `IN_MEMORY`
@@ -46,6 +57,13 @@ export interface CreateRateLimiterInput {
    * Allowed: 'IN_MEMORY', 'REDIS'
   */
   store?: string
+  /**
+   * Store Client Config to be used to store the data
+   *
+   * Must be provided if `REDIS` store is used
+   *
+  */
+  redisConnectionConfig?: RedisConnectionConfig
 }
 
 export type CreateRateLimiterOutput = (req: Request, res: Response, next: NextFunction) => Promise<any>
