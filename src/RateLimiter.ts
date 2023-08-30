@@ -12,7 +12,7 @@ import {
 import InMemoryStore from './InMemoryStore'
 import RedisStore from './RedisStore'
 
-export async function createRateLimiter (customConfig: CreateRateLimiterInput): Promise<CreateRateLimiterOutput> {
+export function createRateLimiter (customConfig: CreateRateLimiterInput): CreateRateLimiterOutput {
   const config = { ...DEFAULT_CONFIG, ...customConfig }
   _validateConfig(config)
 
