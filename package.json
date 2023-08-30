@@ -1,6 +1,6 @@
 {
   "name": "@k_ankit/rate-limit-middleware",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Rate Limiting Middleware for Express",
   "main": "dist/index.js",
   "scripts": {
@@ -20,7 +20,8 @@
   "keywords": [
     "ratelimit",
     "rate limit",
-    "middleware"
+    "middleware",
+    "rate limit redis"
   ],
   "devDependencies": {
     "@types/express": "^4.17.17",

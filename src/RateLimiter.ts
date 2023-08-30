@@ -24,7 +24,9 @@ export async function createRateLimiter (customConfig: CreateRateLimiterInput): 
       memoryStore = new InMemoryStore(inMemoryStoreConfig)
 
       setTimeout(() => {
-        memoryStore.clearAll()
+        if ((memoryStore.clearAll != null) && typeof memoryStore.clearAll === 'function') {
+          memoryStore.clearAll()
+        }
       }, config.timeFrameInMs)
 
       break
@@ -41,11 +43,6 @@ export async function createRateLimiter (customConfig: CreateRateLimiterInput): 
       }
 
       memoryStore = new RedisStore(redisStoreConfig)
-
-      setTimeout(() => {
-        memoryStore.clearAll()
-      }, config.timeFrameInMs)
-
       break
     }
 

@@ -78,5 +78,5 @@ export interface ErrorConstants {
 
 export interface Store {
   shouldAllow: (key: string, maxHits: number) => Promise<boolean>
-  clearAll: () => Promise<void>
+  clearAll?: () => Promise<void>
 }

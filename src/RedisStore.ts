@@ -7,6 +7,7 @@ import {
 interface RedisStore {
   client: any
   prefix: string
+  ttlInSecs: number
 }
 
 interface StoreConfig {
@@ -26,9 +27,9 @@ class RedisStore implements Store {
 
     this.client = createClient({ url })
     this.prefix = storeConfig.prefix
+    this.ttlInSecs = storeConfig.ttlInSecs
 
     this.shouldAllow = this.shouldAllow.bind(this)
-    this.clearAll = this.clearAll.bind(this)
     this._getPrefixedKey = this._getPrefixedKey.bind(this)
 
     this.client.on('error', (error: any) => {
@@ -42,32 +43,28 @@ class RedisStore implements Store {
     })
   }
 
-  async shouldAllow (key: string, maxHits: number, ttlInSecs?: number): Promise<boolean> {
-    if (!this.client.connected) {
+  async shouldAllow (key: string, maxHits: number): Promise<boolean> {
+    if (!this.client.isOpen) {
       await this.client.connect()
     }
 
     const prefixedKey = this._getPrefixedKey(key)
-    const currHits = this.client.get(prefixedKey)
+    const currHits = await this.client.get(prefixedKey)
 
     if (!currHits || currHits === null) {
       await this.client.set(prefixedKey, 1)
-      await this.client.expire(key, ttlInSecs)
+      await this.client.expire(prefixedKey, this.ttlInSecs)
       return true
     }
 
     if (currHits >= maxHits) return false
-
-    await this.client.incr(prefixedKey, 1)
+    await this.client.incr(prefixedKey)
     return true
   }
 
   _getPrefixedKey (key: string): string {
     const prefixedKey = `${this.prefix}::${key}`
     return prefixedKey
-  }
-
-  async clearAll () {
   }
 }
 
