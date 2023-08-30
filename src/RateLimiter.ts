@@ -34,7 +34,12 @@ export async function createRateLimiter (customConfig: CreateRateLimiterInput): 
       if (config.redisConnectionConfig === undefined) {
         throw ERRORS.INVALID_MEMORY_STORE
       }
-      const redisStoreConfig = { connectionConfig: config.redisConnectionConfig, prefix: config.prefix }
+      const redisStoreConfig = {
+        connectionConfig: config.redisConnectionConfig,
+        prefix: config.prefix,
+        ttlInSecs: Math.floor(config.timeFrameInMs / 1000)
+      }
+
       memoryStore = new RedisStore(redisStoreConfig)
 
       setTimeout(() => {

@@ -1,6 +1,6 @@
 {
   "name": "@k_ankit/rate-limit-middleware",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Rate Limiting Middleware for Express",
   "main": "dist/index.js",
   "scripts": {
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/AnkitKumar82/rate-limit-middleware#readme",
   "keywords": [
     "ratelimit",
+    "rate limit",
     "middleware"
   ],
   "devDependencies": {
