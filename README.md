@@ -19,7 +19,7 @@ import Express from 'express'
 const config = {
   timeFrameInMs: 10000,
   maxHits: 10,
-  clientIdentifierHeader: 'token'
+  clientIdentifierHeader: 'x-token'
 }
 
 const rateLimiter = await createRateLimiter(config)
@@ -37,7 +37,7 @@ import Express from 'express'
 const config = {
   timeFrameInMs: 10000,
   maxHits: 10,
-  clientIdentifierHeader: 'token'
+  clientIdentifierHeader: 'x-token',
   store: 'REDIS',
   redisConnectionConfig: {
     host: 'sample.redis.server',
