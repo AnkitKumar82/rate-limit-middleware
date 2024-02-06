@@ -63,6 +63,9 @@ export function createRateLimiter (customConfig: CreateRateLimiterInput): Create
       clientIdentifier = request.header(clientIdentifierHeader) ?? ''
     } else if ((clientIdentifierExtracter != null) && typeof clientIdentifierExtracter === 'function') {
       clientIdentifier = await clientIdentifierExtracter(request, response, next)
+    } else {
+      const xForwardedFor = typeof request.headers['x-forwarded-for'] === 'string' ? request.headers['x-forwarded-for'] : ''
+      clientIdentifier = xForwardedFor || request.socket.remoteAddress || ''
     }
 
     const shouldAllow = await memoryStore.shouldAllow(clientIdentifier, maxHits)

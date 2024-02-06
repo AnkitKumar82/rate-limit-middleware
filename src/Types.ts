@@ -24,13 +24,13 @@ export interface CreateRateLimiterInput {
   /**
    * Identifier Header for the client
    *
-   * `clientIdentifierHeader` or `clientIdentifierExtracter` must be provided
+   * If `clientIdentifierHeader` and `clientIdentifierExtracter` are not provided Ip address is used as client identifier
    */
   clientIdentifierHeader?: string
   /**
    * Extract custom identifiers for clients
    *
-   * `clientIdentifierHeader` or `clientIdentifierExtracter` must be provided
+   * If `clientIdentifierHeader` and `clientIdentifierExtracter` are not provided Ip address is used as client identifier
    */
   clientIdentifierExtracter?: (req: Request, res: Response, next: NextFunction) => Promise<string>
   /**
