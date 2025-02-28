@@ -11,6 +11,7 @@ import {
 } from './Constants'
 import InMemoryStore from './InMemoryStore'
 import RedisStore from './RedisStore'
+import CustomError from './Helpers/CustomError'
 
 export function createRateLimiter (customConfig: CreateRateLimiterInput): CreateRateLimiterOutput {
   const config = { ...DEFAULT_CONFIG, ...customConfig }
@@ -34,19 +35,20 @@ export function createRateLimiter (customConfig: CreateRateLimiterInput): Create
 
     case STORE_ENUM.REDIS: {
       if (config.redisConnectionConfig === undefined) {
-        throw ERRORS.INVALID_MEMORY_STORE
+        throw new CustomError(ERRORS.INVALID_MEMORY_STORE)
       }
+
       const redisStoreConfig = {
         connectionConfig: config.redisConnectionConfig,
         prefix: config.prefix,
-        ttlInSecs: Math.floor(config.timeFrameInMs / 1000)
+        ttlInMS: config.timeFrameInMs
       }
 
       memoryStore = new RedisStore(redisStoreConfig)
       break
     }
 
-    default: throw ERRORS.INVALID_MEMORY_STORE
+    default: throw new CustomError(ERRORS.INVALID_MEMORY_STORE)
   }
 
   return async (request: Request, response: Response, next: NextFunction): Promise<any> => {
@@ -83,6 +85,6 @@ function _validateConfig (config: CreateRateLimiterInput) {
   if (
     (typeof clientIdentifierHeader !== 'string' || clientIdentifierHeader === '') &&
     (typeof clientIdentifierExtracter === 'function' || clientIdentifierExtracter === null)) {
-    throw ERRORS.INVALID_CONFIG
+    throw new CustomError(ERRORS.INVALID_CONFIG)
   }
 }

@@ -7,11 +7,13 @@ import {
 interface RedisStore {
   client: any
   prefix: string
-  ttlInSecs: number
+  ttlInMS: number
+  binCount: number
+  binSizeInMS: number
 }
 
 interface StoreConfig {
-  ttlInSecs: number
+  ttlInMS: number
   connectionConfig: RedisConnectionConfig
   prefix: string
 }
@@ -27,10 +29,13 @@ class RedisStore implements Store {
 
     this.client = createClient({ url })
     this.prefix = storeConfig.prefix
-    this.ttlInSecs = storeConfig.ttlInSecs
+    this.ttlInMS = storeConfig.ttlInMS
+    this.binCount = 100
+    this.binSizeInMS = Math.ceil(storeConfig.ttlInMS / this.binCount)
 
     this.shouldAllow = this.shouldAllow.bind(this)
     this._getPrefixedKey = this._getPrefixedKey.bind(this)
+    this._getPrefixedBinKey = this._getPrefixedBinKey.bind(this)
 
     this.client.on('error', (error: any) => {
       console.log('Error Redis connection', error)
@@ -43,22 +48,36 @@ class RedisStore implements Store {
     })
   }
 
-  async shouldAllow (key: string, maxHits: number): Promise<boolean> {
-    if (!this.client.isOpen) {
-      await this.client.connect()
+  _getPrefixedBinKey(key: string, binId: number) {
+    return `${this.prefix}::${key}::${binId}`
+  }
+
+  async shouldAllow(key: string, maxHits: number): Promise<boolean> {
+    const now = Date.now()
+    const currentBinId = Math.floor(now / this.binSizeInMS)    
+    const oldestBinId = currentBinId - this.binCount + 1
+
+
+    const prefixedBinKeys = []
+    for (let i = currentBinId; i >= oldestBinId; i--) {
+      prefixedBinKeys.push(this._getPrefixedBinKey(key, i))
     }
 
-    const prefixedKey = this._getPrefixedKey(key)
-    const currHits = await this.client.get(prefixedKey)
-
-    if (!currHits || currHits === null) {
-      await this.client.set(prefixedKey, 1)
-      await this.client.expire(prefixedKey, this.ttlInSecs)
-      return true
+    const counts = await this.client.mGet(prefixedBinKeys)
+    const tCount = counts.reduce((sum: number, count: string) => sum + (parseInt(count) || 0), 0)
+    
+    if(tCount >= maxHits) return false
+    
+    // Check if current bin is present otherwise increase count
+    const currentBinCount = counts[0]
+    const currentPrefixedBinKey = this._getPrefixedBinKey(key, currentBinId)
+    if(!currentBinCount || currentBinCount === null) {
+      await this.client.set(currentPrefixedBinKey, 1)
+      await this.client.expire(currentPrefixedBinKey, Math.floor(this.ttlInMS/1000))
+    } else {
+      await this.client.incr(currentPrefixedBinKey)
     }
 
-    if (currHits >= maxHits) return false
-    await this.client.incr(prefixedKey)
     return true
   }
 

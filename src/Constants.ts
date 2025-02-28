@@ -19,14 +19,17 @@ export const DEFAULT_CONFIG = {
 export const ERRORS: ErrorConstants = {
   INVALID_CONFIG: {
     name: 'RL::INVALID_CONFIG',
-    message: 'Invalid config'
+    message: 'Invalid config',
+    status: 400
   },
   INVALID_MEMORY_STORE: {
     name: 'RL::INVALID_MEMORY_STORE',
-    message: 'Invalid Memory Store'
+    message: 'Invalid Memory Store',
+    status: 400
   },
   INVALID_REDIS_CONFIG: {
     name: 'RL::INVALID_REDIS_CONFIG',
-    message: 'Invalid Redis Config'
+    message: 'Invalid Redis Config',
+    status: 400
   }
 }
