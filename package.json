@@ -1,5 +1,5 @@
 {
-  "name": "@a8r/rate-limit-middleware",
+  "name": "@k_ankit/rate-limiter",
   "version": "1.0.0",
   "description": "Rate Limiting Middleware for Express",
   "main": "dist/index.js",

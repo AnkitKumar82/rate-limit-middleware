@@ -3,7 +3,7 @@ Rate Limiting Middleware for Express
 
 ## Installation
 ```shell
-$ npm install --save @k_ankit/rate-limit-middleware
+$ npm install --save @k_ankit/rate-limiter
 ```
 
 ## Config
@@ -28,7 +28,7 @@ Note: If `clientIdentifierHeader` and `clientIdentifierExtracter` are not provid
 The below code uses `IN_MEMORY` store.
 
 ```typescript
-import { createRateLimiter } from '@k_ankit/rate-limit-middleware'
+import { createRateLimiter } from '@k_ankit/rate-limiter'
 import Express from 'express'
 
 const config = {
@@ -46,7 +46,7 @@ TestRouter.get('/test', rateLimiter)
 The below code uses `REDIS` store.
 
 ```typescript
-import { createRateLimiter } from '@k_ankit/rate-limit-middleware'
+import { createRateLimiter } from '@k_ankit/rate-limiter'
 import Express from 'express'
 
 const config = {
