@@ -31,3 +31,5 @@ package-lock.json
 yarn.lock
 .npmrc
 *.config.js
+
+*.ps1
